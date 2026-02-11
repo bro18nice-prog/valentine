@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For my sunflower ❤️</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(to bottom right, #ff9a9e, #fecfef);
+      font-family: Arial, sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 30px;
+      color: white;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 20px;
+      margin: 15px;
+      border-radius: 15px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #yes {
+      background-color: #ff4d6d;
+      color: white;
+    }
+
+    #yes:hover {
+      transform: scale(1.1);
+    }
+
+    #no {
+      background-color: white;
+      position: absolute;
+    }
+
+    .heart {
+      position: absolute;
+      color: red;
+      animation: fall 4s linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100px); opacity: 1; }
+      100% { transform: translateY(100vh); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Lucia, wanna be my valentine, sunflower? ❤️</h1>
+
+<button id="yes" onclick="sayYes()">DA 💖</button>
+<button id="no" onmouseover="moveButton()">NU </button>
+
+<script>
+function moveButton() {
+  const btn = document.getElementById("no");
+  btn.style.top = Math.random() * window.innerHeight + "px";
+  btn.style.left = Math.random() * window.innerWidth + "px";
+}
+
+function sayYes() {
+  alert("Muah Muah ❤️ Te iubesc!");
+  createHearts();
+}
+
+function createHearts() {
+  for (let i = 0; i < 30; i++) {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.fontSize = Math.random() * 30 + 20 + "px";
+    heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+    document.body.appendChild(heart);
+  }
+}
+</script>
+
+</body>
+</html>
