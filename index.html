@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,8 @@
   <style>
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -31,7 +32,7 @@
       border-radius: 15px;
       border: none;
       cursor: pointer;
-      transition: 0.3s;
+      transition: transform 0.3s;
     }
 
     #yes {
@@ -45,18 +46,28 @@
 
     #no {
       background-color: white;
-      position: absolute;
+      position: fixed;
+      margin: 0;
+      left: calc(50% + 70px);
+      top: calc(50% + 35px);
     }
 
     .heart {
       position: absolute;
       color: red;
-      animation: fall 4s linear infinite;
+      top: -50px;
+      pointer-events: none;
+      animation: fall 4s linear forwards;
     }
 
     @keyframes fall {
       0% { transform: translateY(-100px); opacity: 1; }
       100% { transform: translateY(100vh); opacity: 0; }
+    }
+    button:focus-visible { outline: 3px solid #791b39; outline-offset: 4px; }
+    @media (prefers-reduced-motion: reduce) {
+      button { transition: none; }
+      #yes:hover { transform: none; }
     }
   </style>
 </head>
@@ -66,13 +77,18 @@
 <h1>Wanna be my valentine ? ❤️</h1>
 
 <button id="yes" onclick="sayYes()">Yes 💖</button>
-<button id="no" onmouseover="moveButton()">No </button>
+<button id="no" onpointerenter="moveButton()" onclick="moveButton()">No </button>
 
 <script>
 function moveButton() {
   const btn = document.getElementById("no");
-  btn.style.top = Math.random() * window.innerHeight + "px";
-  btn.style.left = Math.random() * window.innerWidth + "px";
+  const padding = 12;
+  const maxLeft = Math.max(0, window.innerWidth - btn.offsetWidth);
+  const maxTop = Math.max(0, window.innerHeight - btn.offsetHeight);
+  const minLeft = Math.min(padding, maxLeft);
+  const minTop = Math.min(padding, maxTop);
+  btn.style.left = minLeft + Math.random() * Math.max(0, maxLeft - padding - minLeft) + "px";
+  btn.style.top = minTop + Math.random() * Math.max(0, maxTop - padding - minTop) + "px";
 }
 
 function sayYes() {
@@ -81,16 +97,21 @@ function sayYes() {
 }
 
 function createHearts() {
+  document.querySelectorAll(".heart").forEach(heart => heart.remove());
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   for (let i = 0; i < 30; i++) {
     const heart = document.createElement("div");
     heart.classList.add("heart");
-    heart.innerHTML = "❤️";
+    heart.textContent = "❤️";
+    heart.setAttribute("aria-hidden", "true");
     heart.style.left = Math.random() * window.innerWidth + "px";
     heart.style.fontSize = Math.random() * 30 + 20 + "px";
     heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+    heart.addEventListener("animationend", () => heart.remove(), { once: true });
     document.body.appendChild(heart);
   }
 }
+window.addEventListener("resize", moveButton);
 </script>
 
 </body>
